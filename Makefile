@@ -2,45 +2,81 @@
 # Shell #
 # ----- #
 
-SHELL	:= /bin/sh
+SHELL := /bin/sh
 ifeq ($(HOSTTYPE),)
   HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-AS = nasm
-ASFLAGS = -f elf64
-AR = ar
-ARFLAGS = crs
+# -------------------- #
+# Prerequisites & Path #
+# -------------------- #
 
-NAME = libasm.a
-SRC = hello_world.asm
-OBJ = hello_world.o
+NAME		:= libasm.a
+SRCDIR	:= srcs/
+OBJDIR	:= objs/
+#INCDIR	:= includes/
 
-PRINT = echo
-DEL = rm -f
+#HEADER		:=	$(shell ls $(INCDIR)))
+OBJ_NAME	:=	$(patsubst %.s, %.o, $(shell ls -1 $(SRCDIR)))
+OBJ       :=  $(addprefix $(OBJDIR), $(OBJ_NAME))
 
-PHONY		:=	all clean fclean re
-SILENT	:=	all clean fclean re
+vpath
+vpath %.s $(SRCDIR)
+vpath %.o $(OBJDIR)
 
-# ----- #
-# Rules #
-# ----- #
+# -------------------------- #
+# Builtin variables override #
+# -------------------------- #
 
-all:
-	$(AS) $(ASFLAGS) -o $(OBJ) $(SRC)
-	$(PRINT) object files generated
-	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
-	$(PRINT) static library generated
+AS			:= nasm
+ASFLAGS	:= -f elf64
+AR			:= ar
+ARFLAGS	:= crs
+ 
+# ----------------- #
+# Command variables #
+# ----------------- #
+
+PRINT	:= -echo
+DEL		:= -rm -rf
+CREATE:= -mkdir -p
+
+# -------------- #
+# Implicit Rules #
+# -------------- #
+
+%.o: %.s | $(OBJDIR) #$(HEADER)
+	$(AS) $(ASFLAGS) -o $(OBJDIR)$@ $<
+	$(PRINT) "Object files generated"
+
+# -------------- #
+# Explicit Rules #
+# -------------- #
+
+all: $(NAME)
+
+$(OBJDIR):
+	$(CREATE) $@
+
+$(NAME): $(OBJ_NAME)
+	$(AR) $(ARFLAGS) $@ $(OBJ)
+	$(PRINT) "Static library generated"
 
 clean:
-	$(DEL) $(OBJ)
-	$(PRINT) object files removed
+	$(DEL) $(OBJDIR)
+	$(PRINT) "Object files deleted"
 
 fclean: clean
 	$(DEL) $(NAME)
-	$(PRINT) static library removed
+	$(PRINT) "Static library deleted"
 
 re: fclean all
 
-.PHONY 	: $(PHONY)
-.SILENT	:	$(SILENT)
+# --------------------- #
+# GNU Special Variables #
+# --------------------- #
+
+PHONY		:= all clean fclean re
+SILENT	:= all $(NAME) $(OBJ_NAME) $(OBJDIR) clean fclean re
+.PHONY	: $(PHONY)
+.SILENT	: $(SILENT)
