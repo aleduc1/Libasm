@@ -1,4 +1,5 @@
-CPU x64
+bits 64
+cpu x64
 global ft_write:function
 
 section .data

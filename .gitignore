@@ -1,3 +1,4 @@
 *.a
 objs/*
 functiontests
+core

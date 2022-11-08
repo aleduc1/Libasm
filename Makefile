@@ -53,17 +53,28 @@ RM		:= -rm -rf
 PRINT	:= -echo
 CREATE:= -mkdir -p
 
+# ------ #
+# Colors #
+# ------ #
+
+NC		:= '\033[0m'
+RED		:= '\033[0;31m'
+GREEN	:= '\033[0;32m'
+ORANGE:= '\033[0;33m'
+BLUE	:= '\033[0;34m'
+PURPLE:= '\033[0;35m'
+
 # -------------- #
 # Implicit Rules #
 # -------------- #
 
 %.o: %.s | $(OBJDIR) #$(HEADER)
 	$(AS) $(ASFLAGS) -o $(OBJDIR)$@ $<
-	$(PRINT) "Object files generated"
+	$(PRINT) $(GREEN)"Object files generated"$(NC)
 
 %.o: %.c #$(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $(OBJDIR)$@
-	$(PRINT) "Test object files generated"
+	$(PRINT) $(GREEN)"Test object files generated"$(NC)
 
 # -------------- #
 # Explicit Rules #
@@ -73,26 +84,30 @@ all: $(NAME)
 
 test: $(NAME) $(TEST)
 
+debug: CFLAGS := $(CFLAGS) -g
+debug: $(NAME) $(TEST)
+	$(PRINT) $(PURPLE)"Added symbols to the symbols table for debugging purposes"$(NC)
+
 $(OBJDIR):
 	$(CREATE) $@
 
 $(NAME): $(OBJ_NAME)
 	$(AR) $(ARFLAGS) $@ $(OBJ)
-	$(PRINT) "Static library generated"
+	$(PRINT) $(BLUE)"Static library generated"$(NC)
 
 $(TEST): $(OBJ_TEST)
 	$(CC) $(CFLAGS) $(OBJDIR)$< -o $@ $(LDLIBS) $(LDFLAGS)
-	$(PRINT) "Test executable generated"
+	$(PRINT) $(ORANGE)"Test executable generated"$(NC)
 
 clean:
 	$(RM) $(OBJDIR)
-	$(PRINT) "Object files deleted"
+	$(PRINT) $(RED)"Object files deleted"$(NC)
 
 fclean: clean
 	$(RM) $(NAME)
 	$(RM) $(TEST)
-	$(PRINT) "Static library deleted"
-	$(PRINT) "Test executable deleted"
+	$(PRINT) $(RED)"Static library deleted"$(NC)
+	$(PRINT) $(RED)"Test executable deleted"$(NC)
 
 re: fclean all
 
@@ -100,7 +115,7 @@ re: fclean all
 # GNU Special Variables #
 # --------------------- #
 
-PHONY		:= all test clean fclean re
-SILENT	:= all test $(NAME) $(OBJ_NAME) $(TEST) $(OBJ_TEST) $(OBJDIR) clean fclean re
+PHONY		:= all debug test clean fclean re
+SILENT	:= all debug test $(NAME) $(OBJ_NAME) $(TEST) $(OBJ_TEST) $(OBJDIR) clean fclean re
 .PHONY	: $(PHONY)
-#.SILENT	: $(SILENT)
+.SILENT	: $(SILENT)
