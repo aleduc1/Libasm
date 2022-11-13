@@ -86,7 +86,7 @@ test: $(NAME) $(TEST)
 
 debug: CFLAGS := $(CFLAGS) -g
 debug: $(NAME) $(TEST)
-	$(PRINT) $(PURPLE)"Added symbols to the symbols table for debugging purposes"$(NC)
+	$(PRINT) $(PURPLE)"Added debugging symbols to the GOT"$(NC)
 
 $(OBJDIR):
 	$(CREATE) $@

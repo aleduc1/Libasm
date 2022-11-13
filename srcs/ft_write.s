@@ -1,28 +1,22 @@
 bits 64										; Uneeded since nasm -f elf64 enable it by default, just for me to know
 cpu x64										; Dont enable opcode instructions that arnt compatible with x64 arch
 default rel								; Enable RIP relative addressing by default, override with abs prefix
-default nobnd							; Noop when MPX is unsupported but since its been drop id rather not
+default nobnd							; Noop when MPX is unsupported but since its been dropped id rather not
+extern __errno_location		; function that evaluate to errno address, Cf errno.h
 global ft_write:function	; function is an ELF specific extension to the global directive
+%define SYS_write 0x01		; Preprocessor directive, Cf /usr/include/syscall.h
 
-section .data
-	msg db "Hello world!", `\n`, `\0` ; String constant in backquotes support C-style escape char
-	msglen equ $-msg	;$ refers to current address, - the address of the beginning of msg
-
-section .text
-ft_write:
-	push rbp ; prologue, create a local stack for callee (ft_write when used independely)
-	mov	rbp, rsp ; enter instruction exist to replace those first 3 lines but is slower
-	sub	rsp, 0x10
-
-	mov rax, 1 ; sys_write, args orde in register define by ABI64 calling conventions
-	mov rdi, 1
-	mov rsi, msg
-	mov rdx, msglen
-	syscall	;x86_64 native instruction instead of old interruptions
-
-	mov rax, 60 ; sys_exit
-	xor rdi, rdi ; most common way to reset a register value to 0
-	syscall
-end: ;Epilogue, stack reset
-	leave ; enter counterpart, but actually used by gcc so fast => esp = ebp and pop ebp
-	ret ; Basically pop rip
+section .text ;dont need to create a local stack frame because x64 + no local variables needed
+ft_write: ; Like what the C implementation does, we write here a wrapper to the syscall write
+	mov rax, SYS_write ; in rax + other register already set if ABI compliant
+	syscall	; x86_64 native instruction instead of old interruption code
+	test rax, rax ; only check last bit because no negative in x64
+	js _error
+	ret ; Pop rip (return address left by caller via call instruction) and jump to it
+_error:
+	neg rax	; On linux systems -1 | -4095 are reverse errno value indicating an error on most syscall
+	mov r10, rax ; Save errno value
+	call __errno_location WRT ..plt; WRT plt CF nasmdoc v2.15.05 chapter 9.2.5
+	mov qword [rax], r10 ; Store errno value in errno memory
+	mov rax, -1	; Return value of our wrapper (man 2 write)
+	ret
