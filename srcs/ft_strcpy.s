@@ -6,7 +6,17 @@ global ft_strcpy:function
 
 section .text
 ft_strcpy:
-; First method that doesnt work, byte per byte approach
+; First method with movsb, didnt do it the rep movsb method because it requires a call to len
+cld ; To make sure we are moving rdi and rsi in the right direction
+lea rax, [rdi]
+loop:
+	movsb ; Operand are optional since it already copies in correct places
+	cmp BYTE [rsi], 0 ; Rsi act like an incrementing pointer in this case, we check on it directly
+	jne loop
+movsb ; For the terminating 0
+ret
+
+; Alternate method: byte per byte approach (untested but should work)
 ;xor rcx, rcx
 ;xor rdx, rdx
 ;
@@ -18,13 +28,3 @@ ft_strcpy:
 ;jne loopbody
 ;lea rax, [rdi]
 ;ret
-
-; Second method that doesnt work, byte per byte approach
-cld
-lea rax, [rdi]
-loop:
-	movsb
-	cmp BYTE [rsi], 0
-	jne loop
-movsb
-ret
