@@ -8,7 +8,7 @@ global ft_write:function	; function is an ELF specific extension to the global d
 %define SYS_write 0x01		; Preprocessor directive, Cf /usr/include/syscall.h
 
 ; Executable segment, opcode mmemonics ;
-section .text ; Dont need to create a local stack frame because x64 + no local variables needed
+section .text ; Dont need to create a local stack frame because red_zone + no local variables needed
 ft_write: ; Like what the C implementation does, we write here a wrapper to the syscall write
 	mov rax, SYS_write ; In rax + other register already set if ABI compliant
 	syscall	; x86_64 native instruction instead of old interruption code
@@ -16,10 +16,13 @@ ft_write: ; Like what the C implementation does, we write here a wrapper to the 
 	js _error ; Jump if SF, there is no negative addresses in x86/x64
 	ret ; Pop rip (return address left by caller via call instruction) and jump to it
 _error:
+	push rbp ; I actually do need a local stack frame here because i will move rsp to align it
+	mov rbp, rsp ; Call will add 8 byte, breaking alignement, but i dont think i need sub 8 here
 	neg rax	; Currently a negative errno, errno defines are only positive, neg does 2s complement
 	mov r10, rax ; Save errno value
-;	and rsp, 0xFFFF_FFFF_FFFF_FFF0 ; Align next 16 bytes bondary for 64 bit registers
+	and rsp, 0xFFFF_FFFF_FFFF_FFF0 ; Align next 16 bytes bondary for 64 bit registers
 	call __errno_location WRT ..plt ; WRT plt CF nasmdoc v2.15.05 chapter 9.2.5
 	mov qword [rax], r10 ; Store errno value in errno memory
 	mov rax, -1	; Return value of our wrapper (man 2 write)
+	leave ; Return the stack frame to how it was before the call
 	ret
