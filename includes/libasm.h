@@ -11,10 +11,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-extern int ft_write();
-extern int ft_read();
-extern int ft_strlen();
-extern int ft_strcpy();
-extern int ft_strcmp();
+extern	ssize_t ft_read(int fd, void *buf, size_t count);
+extern	ssize_t ft_write(int fd, const void *buf, size_t count);
+size_t	ft_strlen(const char *s);
+char		*ft_strcpy(char *dest, const char *src);
+int			ft_strcmp(const char *s1, const char *s2);
 
 #endif

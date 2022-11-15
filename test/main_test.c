@@ -3,7 +3,7 @@
 void		ft_check_write(void)
 {
 	int ret = 0;
-	printf("---------------- Ft_write ------------------\n");
+	printf("\n---------------- Ft_write ------------------\n");
 
 	printf("\033[36mLibasm\033[00m\n");
 	ret = ft_write(1, "Hello world!\n", 14);
@@ -26,7 +26,7 @@ void		ft_check_write(void)
 	printf("With empty buffer -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 	printf("\033[36mLibc\033[00m\n");
 	ret = write(1, "", 1);
-	printf("With empty buffer -> ret value = %d,  error value = %d : %s\n\n", ret, errno, strerror(errno));
+	printf("With empty buffer -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 }
 
 void		ft_check_read(void)
@@ -34,7 +34,7 @@ void		ft_check_read(void)
 	int			ret;
 	char		buf[5000];
 
-	printf("----------------- Ft_read ------------------\n");
+	printf("\n----------------- Ft_read ------------------\n");
 
 	printf("\033[36mLibasm\033[00m\n");
 	ret = ft_read(0, buf, 42);
@@ -61,89 +61,47 @@ void		ft_check_read(void)
 
 void		ft_check_strlen(void)
 {
-	printf("---------------- Ft_strlen -----------------\n");
+	printf("\n---------------- Ft_strlen -----------------\n");
 
-	printf("\033[36mLibasm\033[00m\n");
-	printf("%d\n", ft_strlen("Hello word"));
-	printf("\033[36mLibc\033[00m\n");
-	printf("%ld\n\n", strlen("Hello word"));
+	printf("Regular size test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n\n", ft_strlen("Hello world"), strlen("Hello world"));
 
-	printf("\033[36mLibasm\033[00m\n");
-	printf("%d\n", ft_strlen("a"));
-	printf("\033[36mLibc\033[00m\n");
-	printf("%ld\n\n", strlen("a"));
+	printf("One byte test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n\n", ft_strlen("a"), strlen("a"));
 
-	printf("\033[36mLibasm\033[00m\n");
-	printf("%d\n", ft_strlen("Test"));
-	printf("\033[36mLibc\033[00m\n");
-	printf("%ld\n\n", strlen("Test"));
+	printf("No byte test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n", ft_strlen(""), strlen(""));
 }
 
 void		ft_check_strcpy(void)
 {
+	char	*ret = malloc(20);
 	char	dst[] = "Bonjour";
-	char	src[] = "Hello";
-	printf("---------------- Ft_strcpy -----------------\n");
+	char	dstdup[] = "Bonjour";
+	printf("\n---------------- Ft_strcpy -----------------\n");
 
-	printf("\033[36mLibasm\033[00m\n");
-	ft_strcpy(dst, src);
-	printf("return : %s\n", dst);
-// ToDo Important, strcpy doesnt work when we deal with its return value, ill give it up for now but it isnt a functional complete function !!!
-//	printf("return : %s\n\n", ft_strcpy(dst, src));
-//	printf("\033[36mLibc\033[00m\n");
-//	printf("return : %s\n\n", strcpy(dst, src));
-//
-// ToDo test with empty strings on src then dst, when the return value will work
-//	printf("\033[36mLibasm\033[00m\n");
-//	printf("return : %s\n", ft_strcpy(empty, full));
-//	printf("\033[36mLibc\033[00m\n");
-//	printf("return : %s\n\n", strcpy(empty, full));
-//
-//	printf("\033[36mLibasm\033[00m\n");
-//	printf("return : %s\n", ft_strcpy(full, empty));
-//	printf("\033[36mLibc\033[00m\n");
-//	printf("return : %s\n", strcpy(full, empty));
+
+	printf("Standard test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strcpy(dst, "Hello"), strcpy(dstdup, "Hello"));
+
+	printf("Empty string on src test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strcpy(dst, ""), strcpy(dst, ""));
+
+	free(ret);
+	*ret = 0;
 }
 
 void		ft_check_strcmp(void)
 {
 	char	empty[] = "";
 	char	filled[] = "Hello World !";
-	printf("---------------- Ft_strcmp -----------------\n");
-	/* Same test */
-	printf("\033[36mLibasm\033[00m\n");
-	printf("return : %d\n", ft_strcmp("Hello", "Hello"));
-	printf("\033[36mLibc\033[00m\n");
-	printf("return : %d\n\n", strcmp("Hello", "Hello"));
+	printf("\n---------------- Ft_strcmp -----------------\n");
 
-	/* Lower test */
-	printf("\033[36mLibasm\033[00m\n");
-	printf("return : %d\n", ft_strcmp("abcd", "abce"));
-	printf("\033[36mLibc\033[00m\n");
-	printf("return : %d\n\n", strcmp("abcd", "abce"));
+	printf("Same test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp("Hello" , "Hello"), strcmp("Hello" , "Hello"));
 
-	/* Higher test */
-	printf("\033[36mLibasm\033[00m\n");
-	printf("return : %d\n", ft_strcmp("abce", "abcd"));
-	printf("\033[36mLibc\033[00m\n");
-	printf("return : %d\n\n", strcmp("abce", "abcd"));
+	printf("Lower test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp("abcd", "abce"), strcmp("abcd", "abce"));
 
-	/* With one empty test */
-	printf("\033[36mLibasm\033[00m\n");
-	printf("return : %d\n", ft_strcmp(filled, empty));
-	printf("\033[36mLibc\033[00m\n");
-	printf("return : %d\n\n", strcmp(filled, empty));
-	printf("\033[36mLibasm\033[00m\n");
-	printf("return : %d\n", ft_strcmp(empty, filled));
-	printf("\033[36mLibc\033[00m\n");
-	printf("return : %d\n\n", strcmp(empty, filled));
+	printf("Higher test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp("abce", "abcd"), strcmp("abce", "abcd"));
 
-	/* With two empty test */
-	printf("\033[36mLibasm\033[00m\n");
-	printf("return : %d\n", ft_strcmp("", ""));
-	printf("\033[36mLibc\033[00m\n");
-	printf("return : %d\n\n", strcmp("", ""));
+	printf("With one empty test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp(filled, empty), strcmp(filled, empty));
+	printf("With other empty test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp(empty, filled), strcmp(empty, filled));
 
+	printf("With two empty test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp("", ""), strcmp("", ""));
 }
 
 //void		ft_check_strdup(void)
@@ -168,10 +126,10 @@ void		ft_check_strcmp(void)
 
 int			main(void)
 {
-//	ft_check_write();
-//	ft_check_read();
-//	ft_check_strlen();
-//	ft_check_strcpy();
+	ft_check_write();
+	ft_check_read();
+	ft_check_strlen();
+	ft_check_strcpy();
 	ft_check_strcmp();
 //	ft_check_strdup();
 	return (0);
