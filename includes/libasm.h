@@ -3,6 +3,7 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -14,5 +15,6 @@ extern int ft_write();
 extern int ft_read();
 extern int ft_strlen();
 extern int ft_strcpy();
+extern int ft_strcmp();
 
 #endif

@@ -6,44 +6,25 @@ global ft_strcpy:function
 
 section .text
 ft_strcpy:
-;cld
-;loop:
-;	movsb
-;	cmp rsi, 0
-;	jne loop
-;ret
-
-
+; First method that doesnt work, byte per byte approach
 ;xor rcx, rcx
 ;xor rdx, rdx
 ;
 ;loopbody:
 ;mov BYTE dl, [rsi + rcx]
 ;mov BYTE [rdi + rcx], dl
-;inc rcx
-;
-;loopentry:
-;cmp dl, 0
+;cmp BYTE [rsi + rcx], 0 ; Increment after cmp because we want to copy the first 0 (man 3 strcpy)
+;lea rcx, [rcx + 1] ; Need lea to increment without altering the rflags
 ;jne loopbody
-;
-;mov rax, rdi
+;lea rax, [rdi]
 ;ret
 
-xor		rcx, rcx
-xor		rdx, rdx
-cmp		rsi, 0
-jz		return
-jmp		copy
-
-increment:
-inc		rcx
-
-copy:
-mov		dl, BYTE [rsi + rcx]
-mov		BYTE [rdi + rcx], dl
-cmp		dl, 0
-jnz		increment
-
-return:
-mov		rax, rdi
+; Second method that doesnt work, byte per byte approach
+cld
+lea rax, [rdi]
+loop:
+	movsb
+	cmp BYTE [rsi], 0
+	jne loop
+movsb
 ret
