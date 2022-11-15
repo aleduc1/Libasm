@@ -16,9 +16,9 @@ TEST		:= functiontests
 SRCDIR	:= srcs/
 TESTDIR	:= test/
 OBJDIR	:= objs/
-#INCDIR	:= includes/
+INCDIR	:= includes/
 
-#HEADER		:=	$(shell ls $(INCDIR)))
+HEADER		:=	libasm.h
 OBJ_NAME	:=	$(patsubst %.s, %.o, $(shell ls -1 $(SRCDIR)))
 OBJ_TEST	:=	$(patsubst %.c, %.o, $(shell ls -1 $(TESTDIR)))
 OBJ       :=  $(addprefix $(OBJDIR), $(OBJ_NAME))
@@ -27,13 +27,14 @@ vpath
 vpath %.s $(SRCDIR)
 vpath %.c $(TESTDIR)
 vpath %.o $(OBJDIR)
+vpath %.h $(INCDIR)
 
 # -------------------------- #
 # Builtin variables override #
 # -------------------------- #
 
 CC			:= gcc
-CFLAGS	:= -m64 -Wall -Wextra
+CFLAGS	:= -m64 -I includes -Wall -Wextra
 
 AS			:= nasm
 ASFLAGS	:= -f elf64
@@ -68,11 +69,11 @@ PURPLE:= '\033[0;35m'
 # Implicit Rules #
 # -------------- #
 
-%.o: %.s | $(OBJDIR) #$(HEADER)
+%.o: %.s | $(OBJDIR)
 	$(AS) $(ASFLAGS) -o $(OBJDIR)$@ $<
 	$(PRINT) $(GREEN)"Object files generated"$(NC)
 
-%.o: %.c #$(HEADER)
+%.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $(OBJDIR)$@
 	$(PRINT) $(GREEN)"Test object files generated"$(NC)
 
