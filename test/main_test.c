@@ -6,18 +6,18 @@ void		ft_check_write(void)
 	printf("\n---------------- Ft_write ------------------\n");
 
 	printf("\033[36mLibasm\033[00m\n");
-	ret = ft_write(1, "Hello world!\n", 14);
+	ret = ft_write(1, "ZA WARUDO!\n", 11);
 	printf("With correct fd -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 	printf("\033[36mLibc\033[00m\n");
-	ret = write(1, "Hello world!\n", 14);
+	ret = write(1, "ZA WARUDO!\n", 11);
 	printf("With correct fd -> ret value = %d,  error value = %d : %s\n\n", ret, errno, strerror(errno));
 
 	printf("\033[36mLibasm\033[00m\n");
-	ret = ft_write(-1, "Hello world!\n", 13);
+	ret = ft_write(-1, "ZA WARUDO!\n", 11);
 	printf("With wrong fd -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 	errno = 0;
 	printf("\033[36mLibc\033[00m\n");
-	ret = write(-1, "Hello world!\n", 13);
+	ret = write(-1, "ZA WARUDO!\n", 11);
 	printf("With wrong fd -> ret value = %d,  error value = %d : %s\n\n", ret, errno, strerror(errno));
 	errno = 0;
 
@@ -31,8 +31,8 @@ void		ft_check_write(void)
 
 void		ft_check_read(void)
 {
-	int			ret;
-	char		buf[5000];
+	int		ret;
+	char	buf[5000];
 
 	printf("\n----------------- Ft_read ------------------\n");
 
@@ -55,7 +55,18 @@ void		ft_check_read(void)
 	ret = 0;
 	ret = read(-1, buf, 50);
 	buf[ret] = '\0';
-	printf("With wrong fd -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
+	printf("With wrong fd -> ret value = %d,  error value = %d : %s\n\n", ret, errno, strerror(errno));
+	errno = 0;
+
+	printf("\033[36mLibasm\033[00m\n");
+	ret = ft_read(0, "", 42);
+	buf[ret] = '\0';
+	printf("With empty buffer -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
+	errno = 0;
+	printf("\033[36mLibc\033[00m\n");
+	ret = read(0, "", 42);
+	buf[ret] = '\0';
+	printf("With empty buffer -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 	errno = 0;
 }
 
@@ -63,9 +74,9 @@ void		ft_check_strlen(void)
 {
 	printf("\n---------------- Ft_strlen -----------------\n");
 
-	printf("Regular size test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n\n", ft_strlen("Hello world"), strlen("Hello world"));
+	printf("Regular size test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n", ft_strlen("Hello world"), strlen("Hello world"));
 
-	printf("One byte test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n\n", ft_strlen("a"), strlen("a"));
+	printf("One byte test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n", ft_strlen("a"), strlen("a"));
 
 	printf("No byte test : \033[36mLibasm -> \033[00m%ld\033[36m & Libc -> \033[00m%ld\n", ft_strlen(""), strlen(""));
 }
@@ -76,7 +87,6 @@ void		ft_check_strcpy(void)
 	char	dst[] = "Bonjour";
 	char	dstdup[] = "Bonjour";
 	printf("\n---------------- Ft_strcpy -----------------\n");
-
 
 	printf("Standard test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strcpy(dst, "Hello"), strcpy(dstdup, "Hello"));
 
@@ -104,25 +114,16 @@ void		ft_check_strcmp(void)
 	printf("With two empty test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp("", ""), strcmp("", ""));
 }
 
-//void		ft_check_strdup(void)
-//{
-//	char	dup[] = "New Malloc";
-//	char	dup1[] = "little";
-//	char	dup2[] = "Very big malloc, libasm is a project that was very interesting to me at the time and I am doing a test of my function with a rather large sentence without any goal, but here I fill as I can thank you for ignoring this sentence, there even punctuation or spelling, this is a crash test !";
-//	printf("---------------- Ft_strdup -----------------\n");
-//	printf("\033[36mresultat : libasm\033[00m\n");
-//	printf("return : |%s|\n", ft_strdup(dup));
-//	printf("\033[36mresultat : libc\033[00m\n");
-//	printf("return : |%s|\n\n", strdup(dup));
-//	printf("\033[36mresultat : libasm\033[00m\n");
-//	printf("return : |%s|\n", ft_strdup(dup1));
-//	printf("\033[36mresultat : libc\033[00m\n");
-//	printf("return : |%s|\n\n", strdup(dup1));
-//	printf("\033[36mresultat : libasm\033[00m\n");
-//	printf("return : |%s|\n", ft_strdup(dup2));
-//	printf("\033[36mresultat : libc\033[00m\n");
-//	printf("return : |%s|\n\n", strdup(dup2));
-//}
+void		ft_check_strdup(void)
+{
+	char	str[] = "KONO WA DIO DA !!";
+	char	empty[] = "";
+	char	big[] = "ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA !";
+	printf("\n---------------- Ft_strdup -----------------\n");
+	printf("Regular test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(str), strdup(str));
+	printf("Big test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(big), strdup(big));
+	printf("Empty test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(empty), strdup(empty));
+}
 
 int			main(void)
 {
@@ -131,6 +132,6 @@ int			main(void)
 	ft_check_strlen();
 	ft_check_strcpy();
 	ft_check_strcmp();
-//	ft_check_strdup();
+	ft_check_strdup();
 	return (0);
 }
