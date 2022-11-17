@@ -23,7 +23,7 @@ int	ft_list_size(t_list *begin_list);
 void	ft_list_push_front(t_list **begin_list, void *data);
 
 /*
-** Erase elem of the list whose data is equal to data is equal to the reference data
+** Erase elem of the list whose data is equal to the reference data
 ** Function pointed to by cmp will be used as follow (*cmp)(list_ptr->data, data_ref)
 ** cmp could be ft_strcmp
 ** free() allowed

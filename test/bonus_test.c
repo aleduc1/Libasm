@@ -28,12 +28,6 @@ void	c_print_content(t_list *head) {
 	printf("\n");
 }
 
-/*
-** Erase elem of the list whose data is equal to data is equal to the reference data
-** Function pointed to by cmp will be used as follow (*cmp)(list_ptr->data, data_ref)
-** cmp could be ft_strcmp
-** free() allowed
-*/
 void	c_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)()) {
 	t_list *ptr;
 	t_list *tmp;
@@ -87,6 +81,7 @@ int		main(void) {
 	printf("\033[31mft_list_push_front\033[00m : Pushing 3 elem on a list and print content by following link\n");
 	c_print_content(head);
 	printf("\033[31mft_list_remove_if\033[00m : Trying my function in C first, then printing my list again to see if 'Ohh !' has been deleted \n");
+	ft_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
 //	c_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
 //	c_list_remove_if(&head, (void*)"Ohh !", strcmp);
 //	c_list_remove_if(&head, (void*)"Mukatte kuru no ka ?", strcmp);
