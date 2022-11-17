@@ -94,7 +94,7 @@ test: re $(TEST)
 btest: fclean bonus $(BTEST)
 
 debug: CFLAGS := $(CFLAGS) -g
-debug: $(NAME) $(TEST)
+debug: btest
 	$(PRINT) $(PURPLE)"Added debugging symbols to the GOT"$(NC)
 
 $(OBJDIR):
