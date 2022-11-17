@@ -6,4 +6,5 @@ main_test
 bonus_test
 
 core
-.gdb-history
+.gdb_history
+peda*
