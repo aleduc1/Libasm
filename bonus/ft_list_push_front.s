@@ -9,6 +9,10 @@ global ft_list_push_front:function
 
 section .text
 ft_list_push_front:
+push rbp
+mov rbp, rsp
+and rsp, 0xFFFF_FFFF_FFFF_FFF0 ; Align stack
+
 mov rbx, rdi ; rbx is callee_saved, save **head
 mov r12, rsi ; Save data in callee_saved reg
 
@@ -23,4 +27,5 @@ mov [rax + 8], r13
 mov [rbx], rax ; *list = new
 
 end:
+leave ;Restore stack-frame
 ret
