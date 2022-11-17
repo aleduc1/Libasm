@@ -16,15 +16,19 @@ TEST		:= functiontests
 SRCDIR	:= srcs/
 TESTDIR	:= test/
 OBJDIR	:= objs/
+BONUSDIR:= bonus/
 INCDIR	:= includes/
 
 HEADER		:=	libasm.h
 OBJ_NAME	:=	$(patsubst %.s, %.o, $(shell ls -1 $(SRCDIR)))
+BONUS_NAME:=	$(OBJ_NAME) $(patsubst %.s, %.o, $(shell ls -1 $(BONUSDIR)))
 OBJ_TEST	:=	$(patsubst %.c, %.o, $(shell ls -1 $(TESTDIR)))
 OBJ       :=  $(addprefix $(OBJDIR), $(OBJ_NAME))
+OBJ_BONUS	:=  $(addprefix $(OBJDIR), $(BONUS_NAME))
 
 vpath
 vpath %.s $(SRCDIR)
+vpath %.s $(BONUSDIR)
 vpath %.c $(TESTDIR)
 vpath %.o $(OBJDIR)
 vpath %.h $(INCDIR)
@@ -34,7 +38,7 @@ vpath %.h $(INCDIR)
 # -------------------------- #
 
 CC			:= gcc
-CFLAGS	:= -m64 -I includes -Wall -Wextra
+CFLAGS	:= -m64 -I $(INCDIR) -Wall -Wextra
 
 AS			:= nasm
 ASFLAGS	:= -f elf64
@@ -83,7 +87,7 @@ PURPLE:= '\033[0;35m'
 
 all: $(NAME)
 
-test: $(NAME) $(TEST)
+test: bonus $(TEST)
 
 debug: CFLAGS := $(CFLAGS) -g
 debug: $(NAME) $(TEST)
@@ -99,6 +103,10 @@ $(NAME): $(OBJ_NAME)
 $(TEST): $(OBJ_TEST)
 	$(CC) $(CFLAGS) $(OBJDIR)$< -o $@ $(LDLIBS) $(LDFLAGS)
 	$(PRINT) $(ORANGE)"Test executable generated"$(NC)
+
+bonus: $(BONUS_NAME)
+	$(AR) $(ARFLAGS) $(NAME) $(OBJ_BONUS)
+	$(PRINT) $(BLUE)"Static library with bonus function generated"$(NC)
 
 clean:
 	$(RM) $(OBJDIR)
@@ -116,7 +124,7 @@ re: fclean all
 # GNU Special Variables #
 # --------------------- #
 
-PHONY		:= all debug test clean fclean re
-SILENT	:= all debug test $(NAME) $(OBJ_NAME) $(TEST) $(OBJ_TEST) $(OBJDIR) clean fclean re
+PHONY		:= all debug test bonus clean fclean re
+SILENT	:= all debug test bonus $(NAME) $(OBJ_NAME) $(BONUS_NAME) $(TEST) $(OBJ_TEST) $(OBJDIR) clean fclean re
 .PHONY	: $(PHONY)
 .SILENT	: $(SILENT)
