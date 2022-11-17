@@ -6,18 +6,18 @@ void		ft_check_write(void)
 	printf("\n---------------- Ft_write ------------------\n");
 
 	printf("\033[36mLibasm\033[00m\n");
-	ret = ft_write(1, "ZA WARUDO!\n", 11);
+	ret = ft_write(1, "ZA WARUDO!!\n", 12);
 	printf("With correct fd -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 	printf("\033[36mLibc\033[00m\n");
-	ret = write(1, "ZA WARUDO!\n", 11);
+	ret = write(1, "ZA WARUDO!!\n", 12);
 	printf("With correct fd -> ret value = %d,  error value = %d : %s\n\n", ret, errno, strerror(errno));
 
 	printf("\033[36mLibasm\033[00m\n");
-	ret = ft_write(-1, "ZA WARUDO!\n", 11);
+	ret = ft_write(-1, "ZA WARUDO!!\n", 12);
 	printf("With wrong fd -> ret value = %d,  error value = %d : %s\n", ret, errno, strerror(errno));
 	errno = 0;
 	printf("\033[36mLibc\033[00m\n");
-	ret = write(-1, "ZA WARUDO!\n", 11);
+	ret = write(-1, "ZA WARUDO!!\n", 12);
 	printf("With wrong fd -> ret value = %d,  error value = %d : %s\n\n", ret, errno, strerror(errno));
 	errno = 0;
 
@@ -84,11 +84,11 @@ void		ft_check_strlen(void)
 void		ft_check_strcpy(void)
 {
 	char	*ret = malloc(20);
-	char	dst[] = "Bonjour";
-	char	dstdup[] = "Bonjour";
+	char	dst[] = "nigezu ni kono DIO ni chikadzuite kuru no ka……";
+	char	dstdup[] = "nigezu ni kono DIO ni chikadzuite kuru no ka……";
 	printf("\n---------------- Ft_strcpy -----------------\n");
 
-	printf("Standard test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strcpy(dst, "Hello"), strcpy(dstdup, "Hello"));
+	printf("Standard test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strcpy(dst, "Oh ! Mukatte kuru no ka ?"), strcpy(dstdup, "Oh ! Mukatte kuru no ka ?"));
 
 	printf("Empty string on src test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strcpy(dst, ""), strcpy(dst, ""));
 
@@ -114,24 +114,27 @@ void		ft_check_strcmp(void)
 	printf("With two empty test : \033[36mLibasm -> \033[00m%d\033[36m & Libc -> \033[00m%d\n", ft_strcmp("", ""), strcmp("", ""));
 }
 
-void		ft_check_strdup(void)
+void		ft_check_strdup(int bigtest)
 {
-	char	str[] = "KONO WA DIO DA !!";
+	char	str[] = "KONO WA, DIO DA !!!";
 	char	empty[] = "";
 	char	big[] = "ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA ! ORA-ORA !";
 	printf("\n---------------- Ft_strdup -----------------\n");
 	printf("Regular test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(str), strdup(str));
-	printf("Big test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(big), strdup(big));
+	if (bigtest == 2)
+		printf("Big test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(big), strdup(big));
 	printf("Empty test : \033[36mLibasm -> \033[00m%s\033[36m & Libc -> \033[00m%s\n", ft_strdup(empty), strdup(empty));
 }
 
-int			main(void)
+int			main(int ac, char **av)
 {
-	ft_check_write();
-//	ft_check_read();
-	ft_check_strlen();
-//	ft_check_strcpy();
-//	ft_check_strcmp();
-//	ft_check_strdup();
+	if (av && ac) {
+		ft_check_write();
+		ft_check_read();
+		ft_check_strlen();
+		ft_check_strcpy();
+		ft_check_strcmp();
+		ft_check_strdup(ac); //ac is used as a flag to toggle the bigtest
+	}
 	return (0);
 }

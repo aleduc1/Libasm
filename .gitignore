@@ -1,5 +1,8 @@
-*.a
 objs/*
-functiontests
+*.a
+
+main_test
+bonus_test
+
 core
 .gdb-history

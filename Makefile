@@ -12,7 +12,9 @@ endif
 # -------------------- #
 
 NAME		:= libasm.a
-TEST		:= functiontests
+TEST		:= main_test
+BTEST		:= bonus_test
+
 SRCDIR	:= srcs/
 TESTDIR	:= test/
 OBJDIR	:= objs/
@@ -22,7 +24,8 @@ INCDIR	:= includes/
 HEADER		:=	libasm.h
 OBJ_NAME	:=	$(patsubst %.s, %.o, $(shell ls -1 $(SRCDIR)))
 BONUS_NAME:=	$(OBJ_NAME) $(patsubst %.s, %.o, $(shell ls -1 $(BONUSDIR)))
-OBJ_TEST	:=	$(patsubst %.c, %.o, $(shell ls -1 $(TESTDIR)))
+OBJ_TEST	:=	main_test.o
+BONUS_TEST:=	bonus_test.o
 OBJ       :=  $(addprefix $(OBJDIR), $(OBJ_NAME))
 OBJ_BONUS	:=  $(addprefix $(OBJDIR), $(BONUS_NAME))
 
@@ -87,7 +90,8 @@ PURPLE:= '\033[0;35m'
 
 all: $(NAME)
 
-test: bonus $(TEST)
+test: re $(TEST)
+btest: fclean bonus $(BTEST)
 
 debug: CFLAGS := $(CFLAGS) -g
 debug: $(NAME) $(TEST)
@@ -100,13 +104,17 @@ $(NAME): $(OBJ_NAME)
 	$(AR) $(ARFLAGS) $@ $(OBJ)
 	$(PRINT) $(BLUE)"Static library generated"$(NC)
 
+bonus: $(BONUS_NAME)
+	$(AR) $(ARFLAGS) $(NAME) $(OBJ_BONUS)
+	$(PRINT) $(BLUE)"Static library with bonus generated"$(NC)
+
 $(TEST): $(OBJ_TEST)
 	$(CC) $(CFLAGS) $(OBJDIR)$< -o $@ $(LDLIBS) $(LDFLAGS)
 	$(PRINT) $(ORANGE)"Test executable generated"$(NC)
 
-bonus: $(BONUS_NAME)
-	$(AR) $(ARFLAGS) $(NAME) $(OBJ_BONUS)
-	$(PRINT) $(BLUE)"Static library with bonus function generated"$(NC)
+$(BTEST): $(BONUS_TEST)
+	$(CC) $(CFLAGS) $(OBJDIR)$< -o $@ $(LDLIBS) $(LDFLAGS)
+	$(PRINT) $(ORANGE)"Bonus test executable generated"$(NC)
 
 clean:
 	$(RM) $(OBJDIR)
@@ -114,9 +122,9 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
-	$(RM) $(TEST)
+	$(RM) $(TEST) $(BTEST)
 	$(PRINT) $(RED)"Static library deleted"$(NC)
-	$(PRINT) $(RED)"Test executable deleted"$(NC)
+	$(PRINT) $(RED)"Test executables deleted"$(NC)
 
 re: fclean all
 
@@ -124,7 +132,7 @@ re: fclean all
 # GNU Special Variables #
 # --------------------- #
 
-PHONY		:= all debug test bonus clean fclean re
-SILENT	:= all debug test bonus $(NAME) $(OBJ_NAME) $(BONUS_NAME) $(TEST) $(OBJ_TEST) $(OBJDIR) clean fclean re
+PHONY		:= all debug test btest bonus clean fclean re
+SILENT	:= all debug test btest bonus $(NAME) $(OBJ_NAME) $(BONUS_NAME) $(OBJ_TEST) $(BONUS_TEST) $(TEST) $(BTEST) $(OBJDIR) clean fclean re
 .PHONY	: $(PHONY)
 .SILENT	: $(SILENT)
