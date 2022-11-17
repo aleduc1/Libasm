@@ -2,6 +2,7 @@
 # define LIBASM_BONUS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct	s_list
 {
