@@ -16,10 +16,10 @@ global ft_list_remove_if:function
 ;syscall
 ;jmp end
 
-; This function is mainly 3 big steps for handling the 3 main cases of node removal =>
+; This function is mainly 3 steps for handling the 3 main cases of node removal =>
+; Save data we will use for the function in callee_save register
 ; Case where we need to delete the first x beginning
 ; Case where we need to delete either in the middle or the last without the one before it
-; Case where we deleted the penultimate and we still have to delete the last
 section .text
 ft_list_remove_if: ; return void
 push rbp ; Preserve caller stack frame
@@ -30,8 +30,7 @@ push r12
 push r13
 push r14
 push r15
-;and rsp, 0xFFFF_FFFF_FFFF_FFF0 ; Align stack before first call
-
+and rsp, 0xFFFF_FFFF_FFFF_FFF0 ; Align stack, should be done but this cant hurt (i think) and act as a safety net
 
 ; Step 1 -> Data saving in callee_saved
 mov rbx, rdi	; rdi = t_list **begin_list
@@ -63,13 +62,32 @@ loop1entry:
 step3:
 mov [rbx], r14 ; *begin_list = ptr
 xor r13, r13 ; tmp = NULL
-free_middle_last:
-
-; Step 4 -> 3nd case
-step4:
+jmp loop2entry
+free_middle_last: ; Free the next and adjust ptr
+	mov r13, [r14 + 8] ; tmp = ptr->next
+	mov r11, [r13 + 8] ; ptr->next = tmp->next
+	mov [r14 + 8], r11
+	mov r14, [r14 + 8] ; ptr = ptr->next
+	mov rdi, [r13] ; free(tmp->data)
+	call free WRT ..plt
+	mov rdi, r13 ; free(tmp)
+	call free WRT ..plt
+loop2entry:
+	cmp r14, 0 ; while ptr, first condition
+	jz end
+	cmp QWORD [r14 + 8], 0 ; while ptr->next, second condition
+	jz end
+	mov r11, [r14 + 8] ; ptr->next
+	mov rdi, [r11] ; ptr->next->data
+	mov rsi, r12 ; data_ref
+	call r15 ; Call cmp via callee_saved register
+	cmp rax, 0 ; while cmp(next->data, data_ref), second condition
+	jz free_middle_last ; free correct node if its the one we seek
+	mov r14, [r14 + 8] ; ptr = ptr->next
+	jmp loop2entry ; if its not loop again
 
 end:
-; Restore callee_save register that i used
+; Restore callee_save register that i used and restore stack frame, return to rip + 8
 pop r15
 pop r14
 pop r13
