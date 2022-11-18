@@ -5,17 +5,6 @@ default nobnd
 extern free
 global ft_list_remove_if:function
 
-; ToDo remove, this is just debug code to move somewhere and make sure we reached the correct destination
-;section .data
-;msg db 'hiiiiiiiii'
-;len equ $ - msg
-;mov rdi, 1
-;mov rsi, msg
-;mov rdx, len
-;mov rax, 1
-;syscall
-;jmp end
-
 ; This function is mainly 3 steps for handling the 3 main cases of node removal =>
 ; Save data we will use for the function in callee_save register
 ; Case where we need to delete the first x beginning
