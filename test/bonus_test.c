@@ -35,39 +35,41 @@ void	c_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)()) {
 	ptr = *begin_list;
 	tmp = NULL;
 
-	/* Case where we need to delete the first x beginning */
+	/* Case where we need to delete the first x beginning node */
 	while (ptr && !(*cmp)((char*)ptr->data, (char*)data_ref)) {
 		tmp = ptr;
 		ptr = ptr->next;
 		tmp->next = NULL;
 		free(tmp->data);
 		free(tmp);
+		printf("%p", tmp->data);
+		printf("%p", tmp);
 	}
 	*begin_list = ptr;
 	tmp = NULL;
-
-	/* Case where we need to delete either in the middle or the last without the one before it */
-	while (ptr && ptr->next) {
-		if ((*cmp)((char*)ptr->next->data, (char*)data_ref) == 0) {
-			tmp = ptr->next;
-			ptr->next = tmp->next;
-			ptr = ptr->next;
-			free(tmp->data);
-			free(tmp);
-		}
-		else {
-			ptr = ptr->next;
-		}
-	}
-
-	/* Case where we deleted the penultimate and we still have to delete the last */
-	if (ptr && !ptr->next) {
-		if ((*cmp)((char*)ptr->data, (char*)data_ref) == 0) {
-			free(ptr->data);
-			free(ptr);
-			ptr = NULL;
-		}
-	}
+//
+//	/* Case where we need to delete either in the middle or the last without the one before it */
+//	while (ptr && ptr->next) {
+//		if ((*cmp)((char*)ptr->next->data, (char*)data_ref) == 0) {
+//			tmp = ptr->next;
+//			ptr->next = tmp->next;
+//			ptr = ptr->next;
+//			free(tmp->data);
+//			free(tmp);
+//		}
+//		else {
+//			ptr = ptr->next;
+//		}
+//	}
+//
+//	/* Case where we deleted the penultimate and we still have to delete the last */
+//	if (ptr && !ptr->next) {
+//		if ((*cmp)((char*)ptr->data, (char*)data_ref) == 0) {
+//			free(ptr->data);
+//			free(ptr);
+//			ptr = NULL;
+//		}
+//	}
 }
 
 int		main(void) {
@@ -81,8 +83,8 @@ int		main(void) {
 	printf("\033[31mft_list_push_front\033[00m : Pushing 3 elem on a list and print content by following link\n");
 	c_print_content(head);
 	printf("\033[31mft_list_remove_if\033[00m : Trying my function in C first, then printing my list again to see if 'Ohh !' has been deleted \n");
-	ft_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
 //	c_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
+	ft_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
 //	c_list_remove_if(&head, (void*)"Ohh !", strcmp);
 //	c_list_remove_if(&head, (void*)"Mukatte kuru no ka ?", strcmp);
 //	c_list_remove_if(&head, (void*)"KONO WA, DIO DA !!", strcmp);
