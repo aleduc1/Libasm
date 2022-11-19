@@ -86,6 +86,25 @@ void	c_print_content(t_list *head) {
 	printf("\n");
 }
 
+void	c_list_sort(t_list **begin_list, int (*cmp)()) {
+	void	*tmp;
+	t_list	*ptr;
+
+	ptr = *begin_list;
+	while (ptr && ptr->next)
+	{
+		if ((*cmp)(ptr->data, ptr->next->data) > 0)
+		{
+			tmp = ptr->data;
+			ptr->data = ptr->next->data;
+			ptr->next->data = tmp;
+			ptr = *begin_list;
+		}
+		else
+			ptr = ptr->next;
+	}
+}
+
 void	c_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)()) {
 	t_list *ptr;
 	t_list *tmp;
@@ -118,29 +137,26 @@ void	c_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)()) {
 			ptr = ptr->next;
 		}
 	}
-
-// ** EDIT ** turns out this part wasnt needed at all since i only increment in the else part and not in the if part, so we can clear the penultimate and then check the last, or any combination needed (at least that i can think of right now), i will still keep it as reference in case im wrong and i need to code in asm too
-//	/* Case where we deleted the penultimate and we still have to delete the last */
-//	if (ptr && !ptr->next) {
-//		if ((*cmp)((char*)ptr->data, (char*)data_ref) == 0) {
-//			free(ptr->data);
-//			free(ptr);
-//			ptr = NULL;
-//		}
-//	}
 }
 
 int		main(void) {
 	t_list	*head;
 
 	head = c_create_node((void*)strdup("KONO WA, DIO DA !!"));
-	ft_list_push_front(&head, (void*)strdup("Ohh !"));
+
+	printf("\033[31mft_list_push_front\033[00m : \033[36mPushing 3 elem on existing node ->\033[00m\n");
 	ft_list_push_front(&head, (void*)strdup("Mukatte kuru no ka ?"));
 	ft_list_push_front(&head, (void*)strdup("ZA WARUDO"));
-	printf("\033[31mft_list_size\033[00m : \033[36mIn ASM -> \033[00m%d\033[36m & in C -> \033[00m%d\n", ft_list_size(head), c_size(head));
-	printf("\033[31mft_list_push_front\033[00m : \033[36mPushing 3 elem on existing node\033[00m\n");
+	ft_list_push_front(&head, (void*)strdup("Ohh !"));
 	c_print_content(head);
-	printf("\033[31mft_list_remove_if\033[00m :  \033[36mRemove 3 elem and let Ohh !\033[00m\n");
+
+	printf("\033[31mft_list_size\033[00m : \033[36mIn ASM -> \033[00m%d\033[36m & in C -> \033[00m%d\n\n", ft_list_size(head), c_size(head));
+
+	printf("\033[31mft_list_sort\033[00m : \033[36m Sort in ascending order ->\033[00m\n");
+	c_list_sort(&head, strcmp);
+	c_print_content(head);
+
+	printf("\033[31mft_list_remove_if\033[00m :  \033[36mRemove 3 elem and let Ohh ! ->\033[00m\n");
 	ft_list_remove_if(&head, (void*)"Mukatte kuru no ka ?", strcmp);
 	ft_list_remove_if(&head, (void*)"KONO WA, DIO DA !!", strcmp);
 	ft_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
@@ -150,6 +166,7 @@ int		main(void) {
 	//c_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
 	//c_list_remove_if(&head, (void*)"Ohh !", strcmp);
 	c_print_content(head);
+
 	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", 16), c_atoi_base("11000000", 2));
 	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", c_atoi_base("C0", -16));
 	return (0);
