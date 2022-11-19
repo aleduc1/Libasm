@@ -31,7 +31,7 @@ loopbody:
 	mov r11, [r12 + 8] ; ptr->next
 	mov rsi, [r11] ; ptr->next->data
 	call r13 ; assume clobber register di,si,11 after the call
-	cmp rax, 0
+	cmp eax, 0 ; Extremely tricky, cmp returns a 4 byte signed int, so if its negative we need to compare the 4 byte to know it because with the 8 bytes it will return a positive number no matter what since the 5th overflow bit will be considered a regular bit
 	jg swap ; if cmp > 0
 	mov r12, [r12 + 8] ; ptr = ptr->next
 
