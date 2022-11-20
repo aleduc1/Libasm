@@ -123,7 +123,7 @@ void	c_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)()) {
 	*begin_list = ptr;
 	tmp = NULL;
 
-	/* Case where we need to delete either in the middle or the last without the one before it */
+	/* Case where we need to delete everything remaining */
 	while (ptr && ptr->next) {
 		printf("i here with ptr being : %s, and ptr->next being : %s\n", (char*)ptr->data, (char*)ptr->next->data);
 		if ((*cmp)((char*)ptr->next->data, (char*)data_ref) == 0) {
@@ -145,18 +145,16 @@ int		main(void) {
 	head = c_create_node((void*)strdup("KONO WA, DIO DA !!"));
 
 	printf("\033[31mft_list_push_front\033[00m : \033[36mPushing 3 elem on existing node ->\033[00m\n");
-//	ft_list_push_front(&head, (void*)strdup("Mukatte kuru no ka ?"));
-//	ft_list_push_front(&head, (void*)strdup("ZA WARUDO"));
+	ft_list_push_front(&head, (void*)strdup("Mukatte kuru no ka ?"));
+	ft_list_push_front(&head, (void*)strdup("ZA WARUDO"));
 	ft_list_push_front(&head, (void*)strdup("Ohh !"));
 	c_print_content(head);
 
-//	printf("\033[31mft_list_size\033[00m : \033[36mIn ASM -> \033[00m%d\033[36m & in C -> \033[00m%d\n\n", ft_list_size(head), c_size(head));
-
 	printf("\033[31mft_list_sort\033[00m : \033[36m Sort in ascending order ->\033[00m\n");
-//	c_list_sort(&head, strcmp);
-//	c_print_content(head);
 	ft_list_sort(&head, strcmp);
 	c_print_content(head);
+
+	printf("\033[31mft_list_size\033[00m : \033[36mIn ASM -> \033[00m%d\033[36m & in C -> \033[00m%d\n\n", ft_list_size(head), c_size(head));
 
 	printf("\033[31mft_list_remove_if\033[00m :  \033[36mRemove 3 elem and let Ohh ! ->\033[00m\n");
 	ft_list_remove_if(&head, (void*)"Mukatte kuru no ka ?", strcmp);

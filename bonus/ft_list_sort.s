@@ -22,7 +22,7 @@ swap:
 	mov r14, [r12 + 8]	; ptr->next
 	mov r15, [r14]			; ptr->next->data
 	mov [r12], r15			; ptr->data = ptr->next->data
-	mov r15, r11				; ptr->next->data = tmp
+	mov [r14], r11			; ptr->next->data = tmp
 	mov r12, [rbx]			; ptr = *begin_list
 	jmp loopentry
 
