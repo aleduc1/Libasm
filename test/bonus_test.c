@@ -17,41 +17,58 @@ int get_base(char c)
 		return (-1);
 }
 
-int check_error(int to_check) {
-	if (to_check > 16 || to_check < 1) {
-		return 1;
+int check_error(char *to_check) {
+	int	i;
+
+	i = 0;
+	while (to_check[i]) {
+		if (to_check[i] > 57 || to_check[i] < 48) {
+			return (1);
+		}
+		i++;
 	}
-	return 0;
+	if (i > 2 || i < 0) {
+		return (1);
+	}
+	return (0);
 }
 
-int	c_atoi_base(const char *str, int str_base)
+int	c_atoi_base(const char *str, char	*str_base)
 {
 	int i;
 	int result;
 	int sign;
 	int current;
+	int base;
 
 	i = 0;
 	result = 0;
 	sign = 1;
+	base = 0;
 	/* Step 0 : Check error */
 	if (check_error(str_base))
 		return 0;
-	/* Step 1 : Skip whitespace */
+	/* Step 1 : Get base */
+	while (str_base[i]) {
+		base = base * 10 + str_base[i] - 48;
+		i++;
+	}
+	i = 0;
+	/* Step 2 : Skip whitespace */
 	while(ft_is_space(str[i]))
 		i++;
-	/* Step 2 : Stock negative sign if negative and ignore it for now */
+	/* Step 3 : Stock negative sign if negative and ignore it for now */
 	if(str[i] == '-' || str[i] == '+')
 	{
 		if(str[i] == '-')
 			sign = -1;
 		i++;
 	}
-	/* Step 3 : get_base for current char and then applied same logic for the loop as the atoi one */
+	/* Step 4 : get_base for current char and then applied same logic for the loop as the atoi one */
 	current = get_base(str[i]);
-	while(current >= 0 && current < str_base)
+	while(current >= 0 && current <= base)
 	{
-		result = result * str_base + current;
+		result = result * base + current;
 		i++;
 		current = get_base(str[i]);
 	}
@@ -125,7 +142,6 @@ void	c_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)()) {
 
 	/* Case where we need to delete everything remaining */
 	while (ptr && ptr->next) {
-		printf("i here with ptr being : %s, and ptr->next being : %s\n", (char*)ptr->data, (char*)ptr->next->data);
 		if ((*cmp)((char*)ptr->next->data, (char*)data_ref) == 0) {
 			tmp = ptr->next;
 			ptr->next = tmp->next;
@@ -167,7 +183,7 @@ int		main(void) {
 	//c_list_remove_if(&head, (void*)"Ohh !", strcmp);
 	c_print_content(head);
 
-	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", 16), c_atoi_base("11000000", 2));
-	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", c_atoi_base("C0", -16));
+	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", "16"), c_atoi_base("11000000", "2"));
+	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", c_atoi_base("C0", "-16"));
 	return (0);
 }
