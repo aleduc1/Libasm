@@ -7,7 +7,7 @@ int ft_is_space(char c)
 
 int get_base(char c)
 {
-	if(c >= '0' && c <= '9')
+	if (c >= '0' && c <= '9')
 		return c - '0';
 	else if (c >= 'a' && c <= 'z')
 		return c - 'a' + 10;
@@ -48,17 +48,19 @@ int	c_atoi_base(const char *str, char	*str_base)
 	/* Step 0 : Check error */
 	if (check_error(str_base))
 		return 0;
-	/* Step 1 : Get base */
+	/* Step 1 : Get base and verify it */
 	while (str_base[i]) {
 		base = base * 10 + str_base[i] - 48;
 		i++;
 	}
+	if (base < 2 || base > 16)
+		return (0);
 	i = 0;
 	/* Step 2 : Skip whitespace */
-	while(ft_is_space(str[i]))
+	while	(ft_is_space(str[i]))
 		i++;
 	/* Step 3 : Stock negative sign if negative and ignore it for now */
-	if(str[i] == '-' || str[i] == '+')
+	if (str[i] == '-' || str[i] == '+')
 	{
 		if(str[i] == '-')
 			sign = -1;
@@ -66,7 +68,7 @@ int	c_atoi_base(const char *str, char	*str_base)
 	}
 	/* Step 4 : get_base for current char and then applied same logic for the loop as the atoi one */
 	current = get_base(str[i]);
-	while(current >= 0 && current <= base)
+	while (current >= 0 && current <= base)
 	{
 		result = result * base + current;
 		i++;
@@ -183,7 +185,33 @@ int		main(void) {
 	//c_list_remove_if(&head, (void*)"Ohh !", strcmp);
 	c_print_content(head);
 
-	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", "16"), c_atoi_base("11000000", "2"));
-	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", c_atoi_base("C0", "-16"));
+	//printf("\033[31mft_atoi_base\033[00m : \033[36mSent 11 with wrong base, expecting 0 -> \033[00m");
+	//printf("%d", ft_atoi_base("C0", "-16"));
+	//printf("%d", ft_atoi_base("C0", "-"));
+	//printf("%d", ft_atoi_base("C0", "+5"));
+	//printf("%d", ft_atoi_base("C0", " 5"));
+	//printf("%d", ft_atoi_base("C0", "5 "));
+	//printf("%d", ft_atoi_base("C0", " "));
+	//printf("%d", ft_atoi_base("C0", "100"));
+	//printf("%d", ft_atoi_base("C0", "1"));
+	//printf("%d", ft_atoi_base("C0", "17"));
+	//printf("%d", ft_atoi_base("C0", "Muh!"));
+	//printf("%d\n", ft_atoi_base("C0", "/"));
+
+	/* Correct base, but tricky str */
+	//printf("%d", ft_atoi_base("\t C0", "16"));
+	//printf("%d", ft_atoi_base("-00000011", "2"));
+	//printf("%d", ft_atoi_base(" \ ", "5"));
+	//printf("%d", ft_atoi_base("  ", "11"));
+
+	printf("\033[31mft_atoi_base\033[00m : \033[36mCorrect args, sent in base 2 and 16, expecting 192 -> \033[00m");
+	//printf("%d ", ft_atoi_base("11000000", "2"));
+	//printf("- %d\n", ft_atoi_base("C0", "16"));
+	//printf("%d", ft_atoi_base("80", "16"));
+	printf("- %d\n", ft_atoi_base("76", "10"));
+//	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", ft_atoi_base("C0", "16"), ft_atoi_base("11000000", "2"));
+//	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", ft_atoi_base("C0", "-16"));
+//	printf("\033[31mc_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", "16"), c_atoi_base("11000000", "2"));
+//	printf("\033[31mc_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", c_atoi_base("C0", "-16"));
 	return (0);
 }
