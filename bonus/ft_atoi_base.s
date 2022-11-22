@@ -97,10 +97,10 @@ cmp	BYTE [rdi + rcx], 48	; '0'
 jl get_current_lower
 cmp	BYTE [rdi + rcx], 57	; '9'
 jg get_current_lower
-mov r13, [rdi + rcx] ; current char
-sub r13, - 48 ; current char - 48
-mov r14, r13 ; r14 = current_int
-and r14, 0x0000_0000_0000_000F
+mov BYTE r13, [rdi + rcx] ; current char
+sub r13, 48 ; current char - 48
+mov WORD r14, r13 ; r14 = current_int
+;and r14, 0x0000_0000_0000_000F
 jmp set_ret_value
 
 	get_current_lower:
@@ -108,10 +108,10 @@ cmp	BYTE [rdi + rcx], 97	; 'a'
 jl get_current_caps
 cmp	BYTE [rdi + rcx], 122	; 'z'
 jg get_current_caps
-mov r13, [rdi + rcx] ; current char
-sub r13, - 97 ; current char - 'a' + 10
-mov r14, r13 ; r14 = current_int
-and r14, 0x0000_0000_0000_000F
+mov BYTE r13, [rdi + rcx] ; current char
+sub r13, 87 ; current char - 'a' + 10
+mov WORD r14, r13 ; r14 = current_int
+;and r14, 0x0000_0000_0000_000F
 jmp set_ret_value
 
 	get_current_caps:
@@ -119,10 +119,10 @@ cmp	BYTE [rdi + rcx], 65	; 'A'
 jl wrong_char
 cmp	BYTE [rdi + rcx], 90	; 'Z'
 jg wrong_char
-mov r13, [rdi + rcx] ; current char
-sub r13, - 65 ; current char - 'A' + 10
-mov r14, r13 ; r14 = current_int
-and r14, 0x0000_0000_0000_000F
+mov BYTE r13, [rdi + rcx] ; current char
+sub r13, 55 ; current char - 'A' + 10
+mov WORD r14, r13 ; r14 = current_int
+;and r14, 0x0000_0000_0000_000F
 jmp set_ret_value
 	
 	wrong_char:
@@ -131,7 +131,7 @@ mov r14, -1
 	set_ret_value:
 cmp	r14, 0
 jl	put_sign_back
-cmp	r14, r12
+cmp	WORD r14, r12
 jg	put_sign_back
 imul rax, 10 ; rax = rax * 10
 add rax, r14 ; rax = rax + current

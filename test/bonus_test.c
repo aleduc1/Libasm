@@ -208,7 +208,7 @@ int		main(void) {
 	//printf("%d ", ft_atoi_base("11000000", "2"));
 	//printf("- %d\n", ft_atoi_base("C0", "16"));
 	//printf("%d", ft_atoi_base("80", "16"));
-	printf("- %d\n", ft_atoi_base("76", "10"));
+	printf("- %d\n", ft_atoi_base("C0", "16"));
 //	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", ft_atoi_base("C0", "16"), ft_atoi_base("11000000", "2"));
 //	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", ft_atoi_base("C0", "-16"));
 //	printf("\033[31mc_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", "16"), c_atoi_base("11000000", "2"));
