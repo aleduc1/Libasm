@@ -179,42 +179,35 @@ int		main(void) {
 	ft_list_remove_if(&head, (void*)"KONO WA, DIO DA !!", strcmp);
 	ft_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
 	//ft_list_remove_if(&head, (void*)"Ohh !", strcmp);
-	//c_list_remove_if(&head, (void*)"Mukatte kuru no ka ?", strcmp);
-	//c_list_remove_if(&head, (void*)"KONO WA, DIO DA !!", strcmp);
-	//c_list_remove_if(&head, (void*)"ZA WARUDO", strcmp);
-	//c_list_remove_if(&head, (void*)"Ohh !", strcmp);
 	c_print_content(head);
 
-	//printf("\033[31mft_atoi_base\033[00m : \033[36mSent 11 with wrong base, expecting 0 -> \033[00m");
-	//printf("%d", ft_atoi_base("C0", "-16"));
-	//printf("%d", ft_atoi_base("C0", "-"));
-	//printf("%d", ft_atoi_base("C0", "+5"));
-	//printf("%d", ft_atoi_base("C0", " 5"));
-	//printf("%d", ft_atoi_base("C0", "5 "));
-	//printf("%d", ft_atoi_base("C0", " "));
-	//printf("%d", ft_atoi_base("C0", "100"));
-	//printf("%d", ft_atoi_base("C0", "1"));
-	//printf("%d", ft_atoi_base("C0", "17"));
-	//printf("%d", ft_atoi_base("C0", "Muh!"));
-	//printf("%d\n", ft_atoi_base("C0", "/"));
+	printf("\033[31mft_atoi_base\033[00m : \033[36mSent 11 with wrong base, expecting 0 -> \033[00m");
+	printf("%d", ft_atoi_base("C0", "-16"));
+	printf("%d", ft_atoi_base("C0", "-"));
+	printf("%d", ft_atoi_base("C0", "+5"));
+	printf("%d", ft_atoi_base("C0", " 5"));
+	printf("%d", ft_atoi_base("C0", "5 "));
+	printf("%d", ft_atoi_base("C0", " "));
+	printf("%d", ft_atoi_base("C0", "100"));
+	printf("%d", ft_atoi_base("C0", "1"));
+	printf("%d", ft_atoi_base("C0", "17"));
+	printf("%d", ft_atoi_base("C0", "Muh!"));
+	printf("%d\n", ft_atoi_base("C0", "/"));
 
-	/* Correct base, but tricky str */
-	//printf("\033[31mft_atoi_base\033[00m : \033[36mCorrect base, tricky str, expecting 192 -3 0 0 -1 120 -> \033[00m");
-	//printf("%d", ft_atoi_base("\t C0", "16"));
-	//printf(" %d", ft_atoi_base("-00000011", "2"));
-	//printf(" %d", ft_atoi_base(" \ ", "5"));
-	//printf(" %d", ft_atoi_base("  ", "11"));
-	//printf(" %d", ft_atoi_base("  e", "11"));
-	//printf(" %d\n", ft_atoi_base("  aa", "11"));
+	printf("\033[31mft_atoi_base\033[00m : \033[36mCorrect base, tricky str, expecting 192 192 -3 and all 0 -> \033[00m");
+	printf("%d", ft_atoi_base("\t \rC0", "16")); // Ignoring whitespace in front of number
+	printf(" %d", ft_atoi_base("  c0\?", "16")); // lower case char number + wrong trailing NaN
+	printf(" %d", ft_atoi_base("-00000011.", "2")); // Ignoring trailing NaN char on negatives
+	printf(" %d", ft_atoi_base(" \ ", "5")); // Return 0 on wrong char after ignoring whitespace
+	printf(" %d", ft_atoi_base(" ", "11")); // Empty string of only one space
+	printf(" %d", ft_atoi_base("  - aa", "11")); // Space after sign
+	printf(" %d", ft_atoi_base("e", "11")); // Wrong char return 0 like ft_atoi
+	printf(" %d\n", ft_atoi_base("-.", "11")); // sign then wrong char
 
-	//printf("\033[31mft_atoi_base\033[00m : \033[36mCorrect args, sent in base 2 and 16, expecting 192 -> \033[00m");
-	//printf("%d ", ft_atoi_base("11000000", "2"));
-	//printf("- %d\n", ft_atoi_base("C0", "16"));
-	//printf("\033[31mft_atoi_base\033[00m : \033[36mCorrect args, sent in base 14, expecting -112 -> \033[00m");
-	printf("%d\n", ft_atoi_base("-80", "14"));
-//	printf("\033[31mft_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", ft_atoi_base("C0", "16"), ft_atoi_base("11000000", "2"));
-//	printf("\033[31mft_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", ft_atoi_base("C0", "-16"));
-//	printf("\033[31mc_atoi_base\033[00m : \033[36mSent on base 16 and 2, expecting 192 - 192 ->\033[00m %d - %d\n", c_atoi_base("C0", "16"), c_atoi_base("11000000", "2"));
-//	printf("\033[31mc_atoi_base\033[00m : \033[36mExpecting 0 on wrong param ->\033[00m %d\n", c_atoi_base("C0", "-16"));
+	printf("\033[31mft_atoi_base\033[00m : \033[36mCorrect args, sent in base 2, 16, 14 and 5 expecting 192 - 192 - -112 - -90 -> \033[00m\n");
+	printf("%d ", ft_atoi_base("11000000", "2")); // 192
+	printf("- %d ", ft_atoi_base("C0", "16"));		// 192
+	printf("- %d ", ft_atoi_base("-80", "14"));		// -112
+	printf("- %d\n", ft_atoi_base("-330", "5"));	// -90
 	return (0);
 }

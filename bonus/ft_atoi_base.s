@@ -78,10 +78,10 @@ cmp	BYTE [rdi + rcx], 32 ; ' '
 jz	inc_counter
 
 	handle_sign:
-cmp	BYTE [rdi + rcx], 43 ; '-'
-jz	inc_minus_sign
-cmp	BYTE [rdi + rcx], 45 ; '+'
+cmp	BYTE [rdi + rcx], 43 ; '+'
 jz	inc_plus_sign
+cmp	BYTE [rdi + rcx], 45 ; '-'
+jz	inc_minus_sign
 jmp	get_current_int
 	inc_plus_sign:
 inc rcx
@@ -121,9 +121,11 @@ sub r13b, 55 ; current char - 'A' + 10
 mov r14b, r13b ; r14 = current_int
 jmp set_ret_value
 	
-	wrong_char:
+	wrong_char: ; We can be here either at the end of the parsed number or if a char in str is wrong
+cmp rax, 0 ; If we already have smth to return dont mess with rbx and return it
+jnz put_sign_back ; If this first char that isnt a sign is NAN we return 0
 mov r14, -1
-xor rbx, rbx ; so we dont negate the -1 if he sent -.
+xor rbx, rbx ; so we dont negate the 0 if he sent -. but its unecessary prob
 
 	set_ret_value:
 cmp	r14, 0
