@@ -18,12 +18,11 @@ BTEST		:= bonus_test
 SRCDIR	:= srcs/
 TESTDIR	:= test/
 OBJDIR	:= objs/
-BONUSDIR:= bonus/
 INCDIR	:= includes/
 
 HEADER		:=	libasm.h
-OBJ_NAME	:=	$(patsubst %.s, %.o, $(shell ls -1 $(SRCDIR)))
-BONUS_NAME:=	$(OBJ_NAME) $(patsubst %.s, %.o, $(shell ls -1 $(BONUSDIR)))
+OBJ_NAME	:=	ft_read.o ft_strcmp.o ft_strcpy.o ft_strdup.o ft_strlen.o ft_write.o
+BONUS_NAME:=	$(OBJ_NAME) ft_atoi_base.o ft_list_push_front.o ft_list_remove_if.o ft_list_size.o ft_list_sort.o
 OBJ_TEST	:=	main_test.o
 BONUS_TEST:=	bonus_test.o
 OBJ       :=  $(addprefix $(OBJDIR), $(OBJ_NAME))
@@ -31,7 +30,6 @@ OBJ_BONUS	:=  $(addprefix $(OBJDIR), $(BONUS_NAME))
 
 vpath
 vpath %.s $(SRCDIR)
-vpath %.s $(BONUSDIR)
 vpath %.c $(TESTDIR)
 vpath %.o $(OBJDIR)
 vpath %.h $(INCDIR)
