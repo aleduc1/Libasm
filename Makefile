@@ -132,7 +132,7 @@ re: fclean all
 # GNU Special Variables #
 # --------------------- #
 
-PHONY		:= all debug test btest bonus clean fclean re
+PHONY		:= all debug test btest clean fclean re
 SILENT	:= all debug test btest bonus $(NAME) $(OBJ_NAME) $(BONUS_NAME) $(OBJ_TEST) $(BONUS_TEST) $(TEST) $(BTEST) $(OBJDIR) clean fclean re
 .PHONY	: $(PHONY)
 .SILENT	: $(SILENT)
