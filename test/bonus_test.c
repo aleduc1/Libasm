@@ -198,7 +198,7 @@ int		main(void) {
 	printf("%d", ft_atoi_base("\t \rC0", "16")); // Ignoring whitespace in front of number
 	printf(" %d", ft_atoi_base("  c0\?", "16")); // lower case char number + wrong trailing NaN
 	printf(" %d", ft_atoi_base("-00000011.", "2")); // Ignoring trailing NaN char on negatives
-	printf(" %d", ft_atoi_base(" \ ", "5")); // Return 0 on wrong char after ignoring whitespace
+	printf(" %d", ft_atoi_base(" \\ ", "5")); // Return 0 on wrong char after ignoring whitespace
 	printf(" %d", ft_atoi_base(" ", "11")); // Empty string of only one space
 	printf(" %d", ft_atoi_base("  - aa", "11")); // Space after sign
 	printf(" %d", ft_atoi_base("e", "11")); // Wrong char return 0 like ft_atoi
